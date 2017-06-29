@@ -1,9 +1,9 @@
 import json, requests
+from config import account, token
 
-account = 'https://<account url>/api/v2/form'
-token = '.json?oauth_token=<token>'
+gsf_fail = 0
 
-###Get a specific account on the account
+###Get a specific form on the account
 
 ###Access the URL using GET
 account_url = requests.request('GET', str(account + token))
@@ -25,9 +25,7 @@ if account_json['total'] > 0:
 	#If the form_url returns a status code of 200
 	if form_url.status_code == 200:
 		#Indicate a pass and print the form id and the name of the form
-		print('PASS')
-		print('The form with ID ' + form_id + ' and name ' + form_json['name'] + ' was found. JSON output written to specific_form.json')
-		
+		print('PASS - The form id ' + form_id + ' for ' + account_json['forms'][0]['name'] + ' was found. See json_results/specific_form.json for more info')
 		#Output the status code and json to a file located in the same directory as the script
 		with open('json_results/specific_form.json', 'w') as outfile:
 			json.dump(form_url.status_code, outfile)
@@ -35,10 +33,15 @@ if account_json['total'] > 0:
 			json.dump(form_json, outfile)
 	else:
 		#Indicate a fail and state that the ID no longer exists
-		print('FAIL')
-		print('The form with id ' + form_id + ' no longer exists')
+		print('FAIL - The requested form no longer exists.')
+		gsf_fail += 1
 		
 ###If no forms exist indicate a fail
 else:
-	print('FAIL')
-	print('No forms are found on the account.')
+	print('FAIL - No forms exist on this account.')
+	gsf_fail += 1
+	
+if gsf_fail == 0:
+	print('Get Specific Form PASSED.')
+else:
+	print('Get Specific Form FAILED.')
