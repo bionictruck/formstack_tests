@@ -47,7 +47,7 @@ else:
 invalid_url = requests.request('POST', str(account + '/aaaaaaa/copy' + token))
 
 if invalid_url.status_code	== 404:
-	print('PASS - An invalid for id could not be copied')
+	print('PASS - URL with an invalid id could not be copied')
 else:
 	print('FAIL - A status code of ' + invalid_url.status_code + ' was passed. Expected 404.')
 	cdf_fail += 1
@@ -75,7 +75,7 @@ else:
 invalid_delete_url = requests.request('DELETE', str(account + '/aaaaaaa' + token))
 
 if invalid_url.status_code	== 404:
-	print('PASS - A Status Code of 404 was returned.')
+	print('PASS - A Status Code of 404 was returned, indicating a URL with an invalid id could not be deleted.')
 else:
 	print('FAIL - A Status Code of ' + invalid_url.status_code + ' was returned. Expected 404.')
 	cdf_fail += 1
